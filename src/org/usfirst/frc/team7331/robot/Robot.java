@@ -9,6 +9,7 @@ package org.usfirst.frc.team7331.robot;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.Spark;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.Victor;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
@@ -32,21 +33,16 @@ public class Robot extends IterativeRobot {
 	 * Motor Variables
 	 * 
 	 * */
-	private Victor motor_leftRear;
-	private Victor motor_leftFront;
-	private Victor motor_rightRear;
-	private Victor motor_rightFront;
+	private Spark motor_leftRear, motor_leftFront, motor_rightRear, motor_rightFront;
 
 	/**
-	 * Joystick Variables
+	 * Joystick Variable, port 1
 	 * */
-	private Joystick motor_leftStick;
-	private Joystick motor_rightStick;
+	private Joystick logitechController;
 	
-	private SpeedControllerGroup motor_left;
-	private SpeedControllerGroup motor_right;
+	private SpeedControllerGroup speedController_left, speedController_right;
 	
-	private DifferentialDrive motor_drive;
+	private DifferentialDrive drive_wheel;
 	
 	/**
 	 * This function is run when the robot is first started up and should be
@@ -58,16 +54,27 @@ public class Robot extends IterativeRobot {
 		m_chooser.addObject("My Auto", kCustomAuto);
 		SmartDashboard.putData("Auto choices", m_chooser);
 		
-		motor_leftRear = new Victor(0);
-		motor_leftFront = new Victor(1);
-		motor_left = new SpeedControllerGroup(motor_leftFront, motor_leftRear);
-		motor_rightRear= new Victor(2);
-		motor_rightFront = new Victor(3);
-		motor_right = new SpeedControllerGroup(motor_rightFront, motor_rightRear);
-		motor_leftStick = new Joystick(0);
-		motor_rightStick = new Joystick(1);
+		//Declare the Logitech F310 Controller
+		logitechController = new Joystick(0);
 		
-		motor_drive = new DifferentialDrive(motor_left, motor_right);
+		//Declare each of the Spark Motor Controllers
+		motor_leftRear = new Spark(0);
+		motor_leftFront = new Spark(1);
+		motor_rightRear= new Spark(2);
+		motor_rightFront = new Spark(3);
+		
+		//Fix the revere motor error
+		motor_leftRear.setInverted(true);
+		motor_leftFront.setInverted(true);
+		motor_rightRear.setInverted(true);
+		motor_rightFront.setInverted(true);
+		
+		//Set the Speed Controller groups
+		speedController_left = new SpeedControllerGroup(motor_leftFront, motor_leftRear);
+		speedController_right = new SpeedControllerGroup(motor_rightFront, motor_rightRear);
+		
+		//Declare the motor drives
+		drive_wheel = new DifferentialDrive(speedController_left, speedController_right);
 	}
 
 	/**
@@ -110,7 +117,7 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void teleopPeriodic() {
-		motor_drive.tankDrive(motor_leftStick.getY(), motor_rightStick.getY());
+		drive_wheel.tankDrive(logitechController.getRawAxis(1), logitechController.getRawAxis(5));
 	}
 
 	/**
