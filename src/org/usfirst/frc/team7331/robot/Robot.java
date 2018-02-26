@@ -7,12 +7,9 @@
 
 package org.usfirst.frc.team7331.robot;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
+
 import edu.wpi.first.wpilibj.IterativeRobot;
-import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.Spark;
-import edu.wpi.first.wpilibj.SpeedControllerGroup;
-import edu.wpi.first.wpilibj.Victor;
-import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -30,21 +27,6 @@ public class Robot extends IterativeRobot {
 	private SendableChooser<String> m_chooser = new SendableChooser<>();
 	
 	/**
-	 * Motor Variables
-	 * 
-	 * */
-	private Spark motor_leftRear, motor_leftFront, motor_rightRear, motor_rightFront;
-
-	/**
-	 * Joystick Variable, port 1
-	 * */
-	private Joystick logitechController;
-	
-	private SpeedControllerGroup speedController_left, speedController_right;
-	
-	private DifferentialDrive drive_wheel;
-	
-	/**
 	 * This function is run when the robot is first started up and should be
 	 * used for any initialization code.
 	 */
@@ -54,27 +36,9 @@ public class Robot extends IterativeRobot {
 		m_chooser.addObject("My Auto", kCustomAuto);
 		SmartDashboard.putData("Auto choices", m_chooser);
 		
-		//Declare the Logitech F310 Controller
-		logitechController = new Joystick(0);
-		
-		//Declare each of the Spark Motor Controllers
-		motor_leftRear = new Spark(0);
-		motor_leftFront = new Spark(1);
-		motor_rightRear= new Spark(2);
-		motor_rightFront = new Spark(3);
-		
-		//Fix the revere motor error
-		motor_leftRear.setInverted(true);
-		motor_leftFront.setInverted(true);
-		motor_rightRear.setInverted(true);
-		motor_rightFront.setInverted(true);
-		
-		//Set the Speed Controller groups
-		speedController_left = new SpeedControllerGroup(motor_leftFront, motor_leftRear);
-		speedController_right = new SpeedControllerGroup(motor_rightFront, motor_rightRear);
-		
-		//Declare the motor drives
-		drive_wheel = new DifferentialDrive(speedController_left, speedController_right);
+		//Load everything
+		Motors.loadMotorsAndSpeedControllers();
+		Controls.loadControls();
 	}
 
 	/**
@@ -117,7 +81,9 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void teleopPeriodic() {
-		drive_wheel.tankDrive(logitechController.getRawAxis(1), logitechController.getRawAxis(5));
+		Motors.getMotorDrive().tankDrive(Controls.getContoller().getRawAxis(1), Controls.getContoller().getRawAxis(1));
+		Motors.getMotorDrive().tankDrive((Controls.getContoller().getRawAxis(0)*-1), Controls.getContoller().getRawAxis(0));
+		Motors.getConveyorBelt().set(ControlMode.PercentOutput, Controls.getContoller().getRawAxis(5)/2);
 	}
 
 	/**
@@ -125,6 +91,6 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void testPeriodic() {
-		
+		//System.out.println(Controls.getContoller().getPOV());
 	}
 }
