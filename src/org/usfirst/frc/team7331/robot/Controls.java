@@ -8,9 +8,13 @@ import edu.wpi.first.wpilibj.Joystick;
  * @author Team SHADE
  * -1 = Nothing
  * 0 = up
- * 90 = right 
+ * 45 = up-right
+ * 90 = right
+ * 135 = down-right
  * 180 = bottom
+ * 225 = down-left
  * 270 = left
+ * 315 = up-left
  */
 public class Controls {
 	
@@ -24,5 +28,7 @@ public class Controls {
 	public static Joystick getContoller() {
 		return logitechController;
 	}
+	
+	
 
 }

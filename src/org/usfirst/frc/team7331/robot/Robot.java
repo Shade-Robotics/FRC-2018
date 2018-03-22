@@ -81,9 +81,24 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void teleopPeriodic() {
-		Motors.getMotorDrive().tankDrive(Controls.getContoller().getRawAxis(1), Controls.getContoller().getRawAxis(1));
-		Motors.getMotorDrive().tankDrive((Controls.getContoller().getRawAxis(0)*-1), Controls.getContoller().getRawAxis(0));
-		Motors.getConveyorBelt().set(ControlMode.PercentOutput, Controls.getContoller().getRawAxis(5)/2);
+		
+		if(Controls.getContoller().getPOV() == 0 ) { //Up or Down
+			Motors.getMotorDrive().tankDrive(Controls.getContoller().getRawAxis(5), Controls.getContoller().getRawAxis(5), true);
+		} else if(Controls.getContoller().getPOV() == 45) { //Up-Right
+			Motors.getMotorDrive().tankDrive((Controls.getContoller().getRawAxis(5))*-1, Controls.getContoller().getRawAxis(5), true);
+		} else if(Controls.getContoller().getPOV() == 315){ //Up-Left
+			Motors.getMotorDrive().tankDrive(Controls.getContoller().getRawAxis(5), (Controls.getContoller().getRawAxis(5))*-1, true);
+		}else { //None
+			Motors.getMotorDrive().curvatureDrive(0, 0, false);
+		}
+		
+		if(Controls.getContoller().getPOV() == 0) {
+			Motors.getConveyorBelt().set(ControlMode.PercentOutput, -(Controls.getContoller().getRawAxis(3))/1.5);
+		}else if(Controls.getContoller().getPOV() == 180) {
+			Motors.getConveyorBelt().set(ControlMode.PercentOutput, (Controls.getContoller().getRawAxis(3))/1.5);
+		}else {
+			Motors.getConveyorBelt().set(ControlMode.PercentOutput, 0);
+		}
 	}
 
 	/**
@@ -91,6 +106,7 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void testPeriodic() {
-		//System.out.println(Controls.getContoller().getPOV());
+		System.out.println(Controls.getContoller().getPOV());
+		//System.out.println("Button Count:"+Controls.getContoller().getButtonCount());
 	}
 }

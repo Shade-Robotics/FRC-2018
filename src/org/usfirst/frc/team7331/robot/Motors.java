@@ -26,6 +26,10 @@ public class Motors {
 	 * */
 	private static DifferentialDrive drive_wheel;
 	
+	/**
+	 * Declare and load motors and speed controllers
+	 * 
+	 * */
 	public static void loadMotorsAndSpeedControllers() {
 		//Declare each of the Spark Motor Controllers
 		motor_leftFront = new Spark(2);
@@ -39,9 +43,11 @@ public class Motors {
 		//Set the Speed Controller groups
 		speedController_left = new SpeedControllerGroup(motor_leftFront, motor_leftRear);
 		speedController_right = new SpeedControllerGroup(motor_rightFront, motor_rightRear);
-		//Fix the revere motor error
+		
+		//Fix inverted motors
 		speedController_left.setInverted(true);
 		speedController_right.setInverted(true);
+		
 		//Declare the motor drives
 		drive_wheel = new DifferentialDrive(speedController_left, speedController_right);
 	}
