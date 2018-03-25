@@ -11,26 +11,26 @@ public class Motors {
 	 * Motor Variables
 	 * 
 	 * */
-	private static Spark motor_leftRear, motor_leftFront, motor_rightRear, motor_rightFront;
-	private static TalonSRX motor_conveyor;
+	private Spark motor_leftRear, motor_leftFront, motor_rightRear, motor_rightFront;
+	private TalonSRX motor_conveyor;
 	
 	/**
 	 * Speed Controller Variables
 	 * 
 	 * */
-	private static SpeedControllerGroup speedController_left, speedController_right;
+	private SpeedControllerGroup speedController_left, speedController_right;
 	
 	/**
 	 * Drive Variables
 	 * 
 	 * */
-	private static DifferentialDrive drive_wheel;
+	private DifferentialDrive drive_wheel;
 	
 	/**
 	 * Declare and load motors and speed controllers
 	 * 
 	 * */
-	public static void loadMotorsAndSpeedControllers() {
+	public void loadMotorsAndSpeedControllers() {
 		//Declare each of the Spark Motor Controllers
 		motor_leftFront = new Spark(2);
 		motor_leftRear = new Spark(1);
@@ -44,27 +44,23 @@ public class Motors {
 		speedController_left = new SpeedControllerGroup(motor_leftFront, motor_leftRear);
 		speedController_right = new SpeedControllerGroup(motor_rightFront, motor_rightRear);
 		
-		//Fix inverted motors
-		speedController_left.setInverted(true);
-		speedController_right.setInverted(true);
-		
 		//Declare the motor drives
 		drive_wheel = new DifferentialDrive(speedController_left, speedController_right);
 	}
 
-	public static SpeedControllerGroup getLeftSpeedController() {
+	public SpeedControllerGroup getLeftSpeedController() {
 		return speedController_left;
 	}
 	
-	public static SpeedControllerGroup getRightSpeedController() {
+	public SpeedControllerGroup getRightSpeedController() {
 		return speedController_right;
 	}
 	
-	public static DifferentialDrive getMotorDrive() {
+	public DifferentialDrive getMotorDrive() {
 		return drive_wheel;
 	}
 	
-	public static TalonSRX getConveyorBelt() {
+	public TalonSRX getConveyerBelt() {
 		return motor_conveyor;
 	}
 }

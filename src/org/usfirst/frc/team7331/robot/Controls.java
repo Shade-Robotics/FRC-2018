@@ -2,10 +2,8 @@ package org.usfirst.frc.team7331.robot;
 
 import edu.wpi.first.wpilibj.Joystick;
 
-
-/***
+/*** Arrow Button (POV) degree key
  * 
- * @author Team SHADE
  * -1 = Nothing
  * 0 = up
  * 45 = up-right
@@ -16,16 +14,25 @@ import edu.wpi.first.wpilibj.Joystick;
  * 270 = left
  * 315 = up-left
  */
+
 public class Controls {
 	
-	private static Joystick logitechController;
+	private Joystick logitechController;
 	
-	public static void loadControls() {
+	/***
+	 * Declare and Load all controllers
+	 */
+	public void loadControls() {
 		//Declare the Logitech F310 Controller
 		logitechController = new Joystick(0);
 	}
 	
-	public static Joystick getContoller() {
+	
+	/***
+	 * Method to safely get the joystick variable from earlier
+	 * @return The Joystick
+	 */
+	public Joystick getContoller() {
 		return logitechController;
 	}
 	
